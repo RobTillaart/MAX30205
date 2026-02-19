@@ -14,7 +14,7 @@
 const int MAX30205_REG_TEMPERATURE = 0x00;
 const int MAX30205_REG_CONFIG      = 0x01;
 const int MAX30205_REG_HYSTERESIS  = 0x02;
-const int MAX30205_REG_OVERTEMP    = 0x04;  //  aka OS
+const int MAX30205_REG_OVERTEMP    = 0x04;  //  aka OverTemp ShutDown
 
 //  other constants
 const float MAX30205_LSB = 0.00390625f;

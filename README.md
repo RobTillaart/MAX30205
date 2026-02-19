@@ -18,61 +18,71 @@ Arduino library for the MAX30205, I2C, high accuracy temperature sensor.
 
 **Experimental**
 
-This library is to use MAX30205 high accuracy temperature sensor.
+This library is to use MAX30205 high accuracy (16 bits) temperature sensor.
 
-The MAX30205 temperature sensor is especially meant for skin contact measurements.
-
-This library is work in progress and not functional complete yet. 
-It also needs testing with actual hardware.
+This library is work in progress and needs testing with actual hardware.
 So feedback is welcome!
 
-The MAX30205 has an OS pin that can be used for thresholds or for 
-interrupt conversion is ready.
+The MAX30205 temperature sensor is especially meant for skin contact measurements. It has a high accuracy in the human temperature range
 
+|   range °C       |  accuracy  |  notes  |
+|:----------------:|:----------:|:-------:|
+|  0°C to 15°C     |    ±0.5°C  |
+|  15°C to 35.8°C  |    ±0.3°C  |
+|  35.8°C to 37°C  |    ±0.2°C  |
+|  37°C to 39°C    |    ±0.1°C  |
+|  39°C to 41°C    |    ±0.2°C  |
+|  41°C to 45°C    |    ±0.3°C  |
+|  45°C to 50°C    |    ±0.5°C  |
 
-TABLE  some specs accuracies
+The MAX30205 is a 3.3V device so so not connect it to a 5V as this can 
+or will harm the sensor. If needed use a voltage convertor or an appropriate 
+board that supports the 5V.
 
+The conversion time is about 50 ms or a bit less.
 
+The MAX30205 has an OS pin that can be used for thresholds and more.
+This needs more investigation how this works.
 
 
 Feedback as always is welcome.
 
+### Special characters
 
-### Datasheet warning
+ALT241 = ±
+ALT0176 = °
+
+### Warning
 
 _Do not apply this product to safety protection devices or emergency stop equipment, 
 and any other applications that may cause personal injury due to the product's failure._
 
 
-
 ### Hardware
 
-REDO
 
 ```
              TOPVIEW MAX30205
          +--------------------+
-   pin 6 | o                  |
-   pin 5 | o                o |  pin 1
-         |                  o |  pin 2
-         |                  o |  pin 3
-         |                  o |  pin 4
+         |                    |
+   pin 1 | o                o |  pin 8
+   pin 2 | o                o |  pin 7
+   pin 3 | o                o |  pin 6
+   pin 4 | o                o |  pin 5
          |                    |
          +--------------------+
 ```
 
-|  pin  |   name   |  description      |  Notes  |
-|:-----:|:--------:|:------------------|:-------:|
-|   1   |  SDA/RX  |  I2C data         |  3-5V
-|   2   |  SCL/TX  |  I2C clock        |  3-5V
-|   3   |  GND     |  Ground           |
-|   4   |  VCC     |  Power +5V        |  separate power supply needed.
-|   5   |  SET     |  select com mode  |  HIGH (or n.c.) => I2C, LOW => Serial
-|   6   |   -      |  not connected    |
-
-If pin 5 is not connected or connected to HIGH, **I2C** is selected (default).
-If pin 5 is connected to GND (LOW), Serial / UART mode is selected.
-This latter serial mode is **NOT** supported by this library.
+|  pin  |  name  |  description          |  notes  |
+|:-----:|:--------:|:--------------------|:-------:|
+|   1   |  SDA     |  I2C data           |  3-5V
+|   2   |  SCL     |  I2C clock          |  3-5V
+|   3   |   OS     |  Overtemp Shutdown  |
+|   4   |  GND     |  Ground             |
+|   5   |   A2     |  address pins       |  see datasheet
+|   6   |   A1     |  address pins       |
+|   7   |   A0     |  address pins       |
+|   8   |  VDD     |  +3.3V              |  Bypass GND with 0.1μF cap
 
 
 ### Related
@@ -91,7 +101,6 @@ TODO: Test on Arduino UNO and ESP32
 ## I2C
 
 ### I2C Address
-
 
 The device has three address lines and depending on connection a different 
 address can be chosen.
@@ -130,9 +139,7 @@ Only test **read()** as that is the main function.
 |   100 KHz  |             |  default 
 |   200 KHz  |             |
 |   300 KHz  |             |
-|   400 KHz  |             |
-|   500 KHz  |             |
-|   600 KHz  |             |
+|   400 KHz  |             |  max per datasheet
 
 
 TODO: run performance sketch on hardware.
@@ -191,7 +198,7 @@ See datasheet page 8
 - **bool setOverTemperature(float Celsius = 80)**
 - **float getOverTemperature()**
 
-TODO OS pin behaviour.
+Describe OS pin behaviour.
 
 
 ### Debug
@@ -212,12 +219,11 @@ TODO OS pin behaviour.
 - add examples 
   - configuration
   - interrupt
-  - performance 
+  - fan using OS pin
 
 #### Could
 
 - create unit tests if possible
-- investigate async interface
 - improve error handling
 
 #### Wont
