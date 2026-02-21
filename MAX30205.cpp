@@ -63,7 +63,7 @@ uint8_t MAX30205::getAddress()
 //
 //  READ
 //
-bool MAX30205::read()
+int MAX30205::read()
 {
   uint32_t now = millis();
   //  50 ms is max, 44 is average, tune at your own risk.
